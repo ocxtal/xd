@@ -30,7 +30,7 @@ size_t conv(
 	};
 	__m128i const cv = _mm_load_si128((__m128i const *)conv_table);
 	__m128i const fv = _mm_load_si128((__m128i const *)flip_table);
-	__m128i const tv = _mm_set1_epi8(1);
+	__m128i const tv = _mm_set1_epi8(1), mv = _mm_set1_epi8(0x0f);
 	__m128i const sv = _mm_set1_epi8(' '), dv = _mm_set1_epi8('.');
 
 	#define _load(_p)					( _mm_loadu_si128((__m128i const *)(_p)) )
@@ -50,7 +50,7 @@ size_t conv(
 
 	/* print offset */
 	__m128i ofsv = _finish(_flip(
-		_asciibase(_unpack_nibble_low(_mm_cvtsi64_si128(ofs))),
+		_asciibase(_unpack_nibble_fw(_mm_cvtsi64_si128(ofs))),
 		addr_digits
 	));
 	_store(p, ofsv);
@@ -86,7 +86,7 @@ int main(int argc, char const *argv[])
 		size_t len = fread(in, 1, size, fp);
 		uint8_t *p = out;
 		size_t ofs = 0;
-		while(ofs < len) { p += conv(in, ofs, p, 8); ofs += 16; }
+		while(ofs < len) { p += conv(in, ofs, p, 12); ofs += 16; }
 		fwrite(out, 1, p - out, stdout);
 	}
 	fflush(stdout);
