@@ -79,7 +79,7 @@ int main(int argc, char const *argv[])
 {
 	size_t const size = 2ULL * 1024 * 1024, margin = 256;
 	uint8_t *in = malloc(size + margin);
-	uint8_t *out = malloc(4 * size + margin);
+	uint8_t *out = malloc(8 * size + margin);
 
 	FILE *fp = argc == 1 ? fdopen(0, "rb") : fopen(argv[1], "rb");
 	while(feof(fp) == 0) {
