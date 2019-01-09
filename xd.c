@@ -15,8 +15,8 @@
 
 static inline
 size_t conv(
-	uint8_t const *base,
 	size_t ofs,
+	uint8_t const *src,
 	uint8_t *dst,
 	size_t addr_digits)								/* smaller than 16 */
 {
@@ -57,7 +57,7 @@ size_t conv(
 	p += addr_digits + 2;							/* spaced by two */
 
 	/* print values */
-	__m128i ar = _load(&base[ofs]);
+	__m128i ar = _load(src);
 	__m128i all = _finish(_interleave_low(_asciibase(_unpack_nibble_low(ar))));
 	__m128i alh = _finish(_interleave_high(_asciibase(_unpack_nibble_low(ar))));
 	__m128i ahl = _finish(_interleave_low(_asciibase(_unpack_nibble_high(ar))));
@@ -82,11 +82,13 @@ int main(int argc, char const *argv[])
 	uint8_t *out = malloc(8 * size + margin);
 
 	FILE *fp = argc == 1 ? fdopen(0, "rb") : fopen(argv[1], "rb");
+	size_t ofs = 0;
 	while(feof(fp) == 0) {
 		size_t len = fread(in, 1, size, fp);
 		uint8_t *p = out;
-		size_t ofs = 0;
-		while(ofs < len) { p += conv(in, ofs, p, 12); ofs += 16; }
+		for(size_t i = 0; i < len; i += 16) {
+			p += conv(ofs, &in[i], p, 12); ofs += 16;
+		}
 		fwrite(out, 1, p - out, stdout);
 	}
 	fflush(stdout);
