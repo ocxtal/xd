@@ -75,9 +75,25 @@ size_t conv(
 	return(p - dst);
 }
 
+static inline
+void patch(
+	size_t rem,
+	uint8_t *tail,
+	size_t addr_digits)
+{
+	fprintf(stderr, "rem(%zu)\n", rem);
+	uint8_t *base = &tail[-5LL * 16 - 1];
+	for(size_t i = rem; i < 16; i++) {
+		base[4 * i     ] = ' ';
+		base[4 * i + 1 ] = ' ';
+		base[4 * 16 + i] = ' ';
+	}
+	return;
+}
+
 int main(int argc, char const *argv[])
 {
-	size_t const size = 2ULL * 1024 * 1024, margin = 256;
+	size_t const size = 2ULL * 1024 * 1024, margin = 256, cols = 12;
 	uint8_t *in = malloc(size + margin);
 	uint8_t *out = malloc(8 * size + margin);
 
@@ -87,8 +103,13 @@ int main(int argc, char const *argv[])
 		size_t len = fread(in, 1, size, fp);
 		uint8_t *p = out;
 		for(size_t i = 0; i < len; i += 16) {
-			p += conv(ofs, &in[i], p, 12); ofs += 16;
+			p += conv(ofs, &in[i], p, cols); ofs += 16;
 		}
+
+		if((len % 16) != 0) {
+			patch(len % 16, p, cols);
+		}
+
 		fwrite(out, 1, p - out, stdout);
 	}
 	fflush(stdout);
