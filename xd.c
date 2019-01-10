@@ -81,7 +81,6 @@ void patch(
 	uint8_t *tail,
 	size_t addr_digits)
 {
-	fprintf(stderr, "rem(%zu)\n", rem);
 	uint8_t *base = &tail[-5LL * 16 - 1];
 	for(size_t i = rem; i < 16; i++) {
 		base[4 * i     ] = ' ';
