@@ -1,12 +1,12 @@
 
 /**
- * @file bd.c
+ * @file xd.c
  * @brief fast binary dump
  *
  * @date 2018/8/8
  * @license MIT
 
- * bd -c largefile.txt | grep "string" | vipe | bd -pi largefile.txt
+ * xd -c largefile.txt | grep "string" | vipe | xd -pi largefile.txt
  */
 
 #include <stdio.h>
@@ -119,5 +119,5 @@ int main(int argc, char const *argv[])
 
 
 /**
- * end of bd.c
+ * end of xd.c
  */
