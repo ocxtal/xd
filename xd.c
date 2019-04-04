@@ -5,8 +5,6 @@
  *
  * @date 2018/8/8
  * @license MIT
-
- * xd -c largefile.txt | grep "string" | vipe | xd -pi largefile.txt
  */
 
 /* make sure POSIX APIs are properly activated */
