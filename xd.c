@@ -9,6 +9,14 @@
  * xd -c largefile.txt | grep "string" | vipe | xd -pi largefile.txt
  */
 
+/* make sure POSIX APIs are properly activated */
+#if defined(__linux__) && !defined(_POSIX_C_SOURCE)
+#  define _POSIX_C_SOURCE		200112L
+#endif
+#if defined(__darwin__) && !defined(_DARWIN_C_FULL)
+#  define _DARWIN_C_SOURCE		_DARWIN_C_FULL
+#endif
+
 #include <stdio.h>
 #include <stdint.h>
 #include <x86intrin.h>
