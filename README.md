@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* x86-64
+* x86-64 or AArch64
 * gcc or clang
 * Linux or macOS
 
@@ -14,3 +14,4 @@ just `make`
 ## License
 
 MIT
+
